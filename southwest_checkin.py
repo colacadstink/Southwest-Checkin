@@ -79,36 +79,41 @@ while des_time_minus_6s > cur_time:
 while des_time > cur_time:
 	cur_time = datetime.now()
 
-# check in!
-print("checking in...")
-submit = driver.find_element_by_class_name("button--yellow");
-submit.click()
-
-# wait while the loading spinner is up
-try:
-	while driver.find_element_by_class_name("dimmer").is_displayed():
-		print("loading...")
-		sleep(0.1)
-except NoSuchElementException:
-        print("no spinner found, moving on - hope everything's okay...")
 
 while True:
+	# check in!
+	print("checking in...")
+	submit = driver.find_element_by_class_name("button--yellow");
+	submit.click()
+
+	# wait while the loading spinner is up
+	try:
+		while driver.find_element_by_class_name("dimmer").is_displayed():
+			print("loading...")
+			sleep(0.1)
+	except NoSuchElementException:
+	        print("no spinner found, moving on - hope everything's okay...")
+
 	# while an error message exists, keep trying!
 	try:
-		while driver.find_element_by_class_name("popup-showing"):
+		if driver.find_element_by_class_name("popup-showing"):
 			print("error displayed, trying again")
 			sleep(0.1)
 			driver.find_element_by_class_name("confirm-button").click()
-			sleep(0.5)
-			submit.click()
 	except NoSuchElementException:
 	        print("no error displayed, moving on!")
 		break;
 
 # confirm checkin
 print("confirming check in...")
-submit = driver.find_element_by_class_name("button--yellow");
-submit.click()
+while True:
+	submit = driver.find_element_by_class_name("button--yellow")
+	try:
+		submit.click()
+		break
+	except:
+		print("Error trying to click confirm button, trying again...")
+		sleep(0.5)
 
 # wait while the loading spinner is up
 try:
